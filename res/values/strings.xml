@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Android PRNG</string>
+    <string name="lbl_instructions">Tap Reseed to add bytes to the Crypto++ generator. Tap Generate to fetch random numbers from the Crypto++ generator.</string>
+    <string name="lbl_nunmbers">0x00 0x01 ....</string>
+    <string name="btn_generate">Generate</string>
+    <string name="btn_reseed">Reseed</string>    
+</resources>
