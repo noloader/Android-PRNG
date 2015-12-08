@@ -12,13 +12,13 @@ You can do it by repeatedly building and installing the Crypto++ library. For th
 
 The maximum brevity example of building from "Android (Command Line)":
 
-  git clone https://github.com/weidai11/cryptopp.git
-  cd cryptopp
-  wget https://www.cryptopp.com/w/images/0/0a/Setenv-android.sh.zip
-  unzip -aoq Setenv-android.sh.zip
-  . ./setenv-android.sh armeabi stlport
+    git clone https://github.com/weidai11/cryptopp.git
+    cd cryptopp
+    wget https://www.cryptopp.com/w/images/0/0a/Setenv-android.sh.zip
+    unzip -aoq Setenv-android.sh.zip
+    . ./setenv-android.sh armeabi stlport
   
-  make distclean && make static dynamic
-  sudo make install PREFIX=/usr/local/cryptopp/android-armeabi
+    make distclean && make static dynamic
+    sudo make install PREFIX=/usr/local/cryptopp/android-armeabi
   
 Lather, rinse, repeat.
