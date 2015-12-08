@@ -18,7 +18,8 @@ The maximum brevity example of building from "Android (Command Line)":
     unzip -aoq Setenv-android.sh.zip
     . ./setenv-android.sh armeabi stlport
   
-    make distclean && make static dynamic
+    make -f GNUmakefile-cross distclean
+    make -f GNUmakefile-cross static dynamic
     sudo make install PREFIX=/usr/local/cryptopp/android-armeabi
   
 Lather, rinse, repeat.
