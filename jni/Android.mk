@@ -11,6 +11,7 @@ STLPORT_LIB      := /opt/android-ndk-r10d/sources/cxx-stl/stlport/libs/$(TARGET_
 
 LOCAL_MODULE := stlport_shared
 LOCAL_SRC_FILES := $(STLPORT_LIB)/libstlport_shared.so
+LOCAL_CPP_FEATURES += rtti exceptions
 
 LOCAL_EXPORT_CPPFLAGS :=
 LOCAL_EXPORT_C_INCLUDES := $(STLPORT_INCL)
@@ -28,8 +29,8 @@ CRYPTOPP_LIB    := /usr/local/cryptopp/android-$(TARGET_ARCH_ABI)/lib
 
 LOCAL_MODULE       := cryptopp
 LOCAL_SRC_FILES    := $(CRYPTOPP_LIB)/libcryptopp.so
+LOCAL_CPP_FEATURES := rtti exceptions
 
-LOCAL_EXPORT_CPPFLAGS := -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function
 LOCAL_EXPORT_C_INCLUDES := $(CRYPTOPP_INCL) $(CRYPTOPP_INCL)/cryptopp
 
 include $(PREBUILT_SHARED_LIBRARY)
@@ -47,9 +48,7 @@ APP_MODULES     := prng stlport_shared cryptopp
 LOCAL_C_INCLUDES   := $(STLPORT_INCL) $(CRYPTOPP_INCL)
 
 LOCAL_CPP_FEATURES := rtti exceptions
-
-LOCAL_CPP_FLAGS    := -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function
-LOCAL_CPP_FLAGS    += -Wl,--exclude-libs,ALL
+LOCAL_CPP_FLAGS    := -Wl,--exclude-libs,ALL
 
 LOCAL_LDLIBS            := -llog -landroid
 LOCAL_SHARED_LIBRARIES  := cryptopp stlport_shared
