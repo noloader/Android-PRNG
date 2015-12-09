@@ -45,9 +45,9 @@
 
     <condition
         property="sdk.dir"
-        value="${env.ANDROID_HOME}" >
+        value="${env.ANDROID_SDK_ROOT}" >
 
-        <isset property="env.ANDROID_HOME" />
+        <isset property="env.ANDROID_SDK_ROOT" />
     </condition>
 
     <!--
@@ -67,7 +67,7 @@
     <!-- quick check on sdk.dir -->
 
     <fail
-        message="sdk.dir is missing. Make sure to generate local.properties using &apos;android update project&apos; or to inject it through the ANDROID_HOME environment variable."
+        message="sdk.dir is missing. Make sure to generate local.properties using &apos;android update project&apos; or to inject it through the ANDROID_SDK_ROOT environment variable."
         unless="sdk.dir" />
 
     <!--
