@@ -24,7 +24,7 @@ LOCAL_SHARED_LIBRARIES  := cryptopp
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := prng
-LOCAL_SRC_FILES := $(addprefix $(CRYPTOPP_PATH),test_shared.cxx)
+LOCAL_SRC_FILES := prng.cpp
 LOCAL_CPPFLAGS := -Wall -fvisibility=hidden
 LOCAL_CPP_FEATURES := rtti exceptions
 LOCAL_LDFLAGS := -Wl,--exclude-libs,ALL -Wl,--as-needed
