@@ -1,4 +1,4 @@
-Android-PRNG is a sample Android NDK project to demonstrate two topics. First, it shows you how to compile a real shared object using the Crypto++ library on Android. Second, it shows you how to sample sensors to accumulate seed data to use with a software based random number generator.
+Android-PRNG is a sample Android NDK project to demonstrate two topics. First, it shows you how to compile a shared object using the Crypto++ library on Android. Second, it shows you how to sample sensors to accumulate seed data to use with a software based random number generator.
 
 The project requires the Crypto++ library built for Android with architectures armeabi-v7a, arm64-v8a, x64 and x86_64. The project looks for them in the following locations based on architecture:
 
@@ -37,7 +37,7 @@ ant debug install
 
 Once installed, you should find it in the App Launcher.
 
-=== References ===
+### References
 
 The following references from the Crypto++ wiki should be helpful.
 
