@@ -3,7 +3,7 @@ package com.cryptopp.prng;
 public class PRNG {
 
     static {
-        System.loadLibrary("stlport_shared");
+        System.loadLibrary("c++_shared");
         System.loadLibrary("cryptopp");
         System.loadLibrary("prng");
     }
