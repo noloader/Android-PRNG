@@ -327,31 +327,31 @@ jint JNICALL Java_com_cryptopp_prng_PRNG_CryptoPP_1Reseed(JNIEnv* env, jclass,
 	try {
 		if (!env) {
 			LOG_ERROR("Reseed: environment is NULL");
+			return 0;
 		}
 
 		if (!seed) {
 			// OK if the caller passed NULL for the array
 			LOG_WARN("GetBytes: byte array is NULL");
+			return 0;
 		}
 
-		if (env && seed) {
-			ReadByteBuffer buffer(env, seed);
+		ReadByteBuffer buffer(env, seed);
 
-			const byte* _arr = buffer.GetByteArray();
-			size_t _len = buffer.GetArrayLen();
+		const byte* seed_arr = buffer.GetByteArray();
+		size_t seed_len = buffer.GetArrayLen();
 
-			if ((_arr == NULL)) {
-				LOG_ERROR("Reseed: array pointer is not valid");
-			} else if ((_len == 0)) {
-				LOG_ERROR("Reseed: array size is not valid");
-			} else {
-				AutoSeededRandomPool& prng = GetPRNG();
-				prng.IncorporateEntropy(_arr, _len);
+		if ((seed_arr == NULL)) {
+			LOG_ERROR("Reseed: array pointer is not valid");
+		} else if ((seed_len == 0)) {
+			LOG_ERROR("Reseed: array size is not valid");
+		} else {
+			AutoSeededRandomPool& prng = GetPRNG();
+			prng.IncorporateEntropy(seed_arr, seed_len);
 
-				LOG_INFO("Reseed: seeded with %d bytes", (int )_len);
+			LOG_INFO("Reseed: seeded with %d bytes", (int )seed_len);
 
-				consumed += (int) _len;
-			}
+			consumed += (int) seed_len;
 		}
 	} catch (const Exception& ex) {
 		LOG_ERROR("Reseed: Crypto++ exception: \"%s\"", ex.what());
@@ -405,20 +405,20 @@ JNIEXPORT jint JNICALL Java_com_cryptopp_prng_PRNG_CryptoPP_1GetBytes(
 
 			WriteByteBuffer buffer(env, bytes);
 
-			byte* _arr = buffer.GetByteArray();
-			size_t _len = buffer.GetArrayLen();
+			byte* seed_arr = buffer.GetByteArray();
+			size_t seed_len = buffer.GetArrayLen();
 
-			if ((_arr == NULL)) {
+			if ((seed_arr == NULL)) {
 				LOG_ERROR("GetBytes: array pointer is not valid");
-			} else if ((_len == 0)) {
+			} else if ((seed_len == 0)) {
 				LOG_ERROR("GetBytes: array size is not valid");
 			} else {
 				AutoSeededRandomPool& prng = GetPRNG();
-				prng.GenerateBlock(_arr, _len);
+				prng.GenerateBlock(seed_arr, seed_len);
 
-				LOG_INFO("GetBytes: generated %d bytes", (int )_len);
+				LOG_INFO("GetBytes: generated %d bytes", (int )seed_len);
 
-				retrieved += (int) _len;
+				retrieved += (int) seed_len;
 			}
 		}
 	} catch (const Exception& ex) {
