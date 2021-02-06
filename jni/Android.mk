@@ -3,24 +3,6 @@ LOCAL_PATH := $(call my-dir)
 # NDK_DEBUG_IMPORTS := 1
 
 #########################################################
-# STLport library
-include $(CLEAR_VARS)
-
-STLPORT_INCL     := /opt/android-ndk-r10d/sources/cxx-stl/stlport/stlport
-STLPORT_LIB      := /opt/android-ndk-r10d/sources/cxx-stl/stlport/libs/$(TARGET_ARCH_ABI)
-
-LOCAL_MODULE := stlport_shared
-LOCAL_SRC_FILES := $(STLPORT_LIB)/libstlport_shared.so
-LOCAL_CPP_FEATURES += rtti exceptions
-
-LOCAL_EXPORT_CPPFLAGS :=
-LOCAL_EXPORT_C_INCLUDES := $(STLPORT_INCL)
-
-include $(PREBUILT_SHARED_LIBRARY)
-
-LOCAL_SHARED_LIBRARIES  := stlport_shared
-
-#########################################################
 # Crypto++ library
 include $(CLEAR_VARS)
 
@@ -28,7 +10,7 @@ CRYPTOPP_INCL   := /usr/local/cryptopp/android-$(TARGET_ARCH_ABI)/include
 CRYPTOPP_LIB    := /usr/local/cryptopp/android-$(TARGET_ARCH_ABI)/lib
 
 LOCAL_MODULE       := cryptopp
-LOCAL_SRC_FILES    := $(CRYPTOPP_LIB)/libcryptopp.so
+LOCAL_SRC_FILES    := $(CRYPTOPP_LIB)/libcryptopp_static.a
 LOCAL_CPP_FEATURES := rtti exceptions
 
 LOCAL_EXPORT_C_INCLUDES := $(CRYPTOPP_INCL) $(CRYPTOPP_INCL)/cryptopp
@@ -41,19 +23,23 @@ LOCAL_SHARED_LIBRARIES  := cryptopp
 # PRNG library
 include $(CLEAR_VARS)
 
-APP_STL         := stlport_shared
-APP_MODULES     := prng stlport_shared cryptopp
-
-# My ass... LOCAL_EXPORT_C_INCLUDES is useless
-LOCAL_C_INCLUDES   := $(STLPORT_INCL) $(CRYPTOPP_INCL)
-
+LOCAL_MODULE := prng
+LOCAL_SRC_FILES := $(addprefix $(CRYPTOPP_PATH),test_shared.cxx)
+LOCAL_CPPFLAGS := -Wall -fvisibility=hidden
 LOCAL_CPP_FEATURES := rtti exceptions
-LOCAL_CPP_FLAGS    := -Wl,--exclude-libs,ALL
+LOCAL_LDFLAGS := -Wl,--exclude-libs,ALL -Wl,--as-needed
 
-LOCAL_LDLIBS            := -llog -landroid
-LOCAL_SHARED_LIBRARIES  := cryptopp stlport_shared
+# Configure for release unless NDK_DEBUG=1
+ifeq ($(NDK_DEBUG),1)
+    LOCAL_CPPFLAGS := $(LOCAL_CPPFLAGS) -DDEBUG
+else
+    LOCAL_CPPFLAGS := $(LOCAL_CPPFLAGS) -DNDEBUG
+endif
 
-LOCAL_MODULE    := prng
-LOCAL_SRC_FILES := libprng.cpp
+LOCAL_EXPORT_CPPFLAGS := $(LOCAL_CPPFLAGS)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/..
+LOCAL_EXPORT_LDFLAGS := -Wl,--gc-sections
+
+LOCAL_STATIC_LIBRARIES := cryptopp_static
 
 include $(BUILD_SHARED_LIBRARY)
