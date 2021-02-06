@@ -394,32 +394,31 @@ JNIEXPORT jint JNICALL Java_com_cryptopp_prng_PRNG_CryptoPP_1GetBytes(
 
 		if (!env) {
 			LOG_ERROR("GetBytes: environment is NULL");
+			return 0;
 		}
 
 		if (!bytes) {
 			// OK if the caller passed NULL for the array
 			LOG_WARN("GetBytes: byte array is NULL");
+			return 0;
 		}
 
-		if (env && bytes) {
+		WriteByteBuffer buffer(env, bytes);
 
-			WriteByteBuffer buffer(env, bytes);
+		byte* prng_arr = buffer.GetByteArray();
+		size_t prng_len = buffer.GetArrayLen();
 
-			byte* seed_arr = buffer.GetByteArray();
-			size_t seed_len = buffer.GetArrayLen();
+		if ((prng_arr == NULL)) {
+			LOG_ERROR("GetBytes: array pointer is not valid");
+		} else if ((prng_len == 0)) {
+			LOG_ERROR("GetBytes: array size is not valid");
+		} else {
+			AutoSeededRandomPool& prng = GetPRNG();
+			prng.GenerateBlock(prng_arr, prng_len);
 
-			if ((seed_arr == NULL)) {
-				LOG_ERROR("GetBytes: array pointer is not valid");
-			} else if ((seed_len == 0)) {
-				LOG_ERROR("GetBytes: array size is not valid");
-			} else {
-				AutoSeededRandomPool& prng = GetPRNG();
-				prng.GenerateBlock(seed_arr, seed_len);
+			LOG_INFO("GetBytes: generated %d bytes", (int )prng_len);
 
-				LOG_INFO("GetBytes: generated %d bytes", (int )seed_len);
-
-				retrieved += (int) seed_len;
-			}
+			retrieved += (int) prng_len;
 		}
 	} catch (const Exception& ex) {
 		LOG_ERROR("GetBytes: Crypto++ exception: \"%s\"", ex.what());
